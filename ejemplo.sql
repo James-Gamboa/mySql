@@ -76,7 +76,7 @@ obligatorio varchar (50) not null
 )
 
 
-alter table usuarios add column telefono varchar (20)
+alter table usuarios add column telefono varchar (50)
 
 alter table usuarios modify telefono int
 
@@ -111,9 +111,7 @@ set telefono = "+5069994563"
 where id = 3
 
 select*from usuarios
-
 where edad > 18
-
 order by edad desc
 
 /*Nota: La columna 'edad' no fue creada en la tabla original. ¿Qué error crees que aparecerá?
@@ -129,5 +127,5 @@ update usuarios set edad = 45 where id = 5
 
 select nombre,correo,fecha_registro from usuarios
 
-select * from productos
+select * from producto
 where precio_producto > 100
