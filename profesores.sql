@@ -31,21 +31,21 @@ select * from profesores;
 select * from profesores
 where anios_experiencia > 10
 
-insert into profesores (nombre, especialidad, anios_experiencia)
-values("Solid Snake", "filosofia ", 10)
+insert into profesores (nombre, especialidad, anios_experiencia) 
+values("Solid Snake", "filosofia ", 10) 
 
 
 select * from profesores
 where anios_experiencia = 10
 
 select * from profesores
-where anios_experiencia >= 10 and anios_experiencia <= 20
+where anios_experiencia >= 10 and anios_experiencia <= 20 
 
 
 select * from profesores
-order by anios_experiencia asc;
+order by anios_experiencia asc
 
 select * from profesores
-order by anios_experiencia desc;
+order by anios_experiencia desc
 
 
