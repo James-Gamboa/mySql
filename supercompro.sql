@@ -79,4 +79,18 @@ insert into empleados (nombre,puesto,salario)
 values  ("Pedrito","Jefe planta","60000");
 
 insert into clientes (nombre,correo,telefono) 
-values ("Pilar","pilar45@gmail.com","6784512")
+values ("Pilar","pilar45@gmail.com","6784512");
+
+
+use megasuper;
+
+select * from usuarios;
+
+select count(*)as cantidad_usuarios from usuarios where edad > 15;
+
+
+select sum(edad) as edad_total_columnas from usuarios where edad=15;
+
+select avg(edad) from usuarios;
+
+select max(edad) as edad_maxima, min(edad) as edad_minima from usuarios;
