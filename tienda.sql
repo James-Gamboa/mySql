@@ -85,4 +85,17 @@ select max(precio) as precio_mas_alto, min(precio) as precio_mas_bajo from produ
 
 select id_cliente, Count(*) as total_pedidos
 From pedidos
-Group BY id_cliente;
+group by id_cliente;
+
+select count(distinct id_producto) as producto_distintos
+from detalle_pedido;
+
+select sum(cantidad)  as total_vendido
+from detalle_pedido;
+
+select categoria,avg(precio) as precio_promedio
+from productos
+group by categoria;
+
+select * from clientes
+where correo_cliente like "%@gmail.com";
