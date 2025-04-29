@@ -86,6 +86,9 @@ INSERT INTO Inscripciones (id_estudiante, id_curso, fecha_inscripcion) VALUES
 (3, 1, '2025-03-04'),
 (3, 4, '2025-03-05');
 
+SELECT * FROM Cursos;
+SELECT * FROM Estudiantes;
+
 
 /*Vista 1: Vista de Inscripciones de Estudiantes
 Cree una vista llamada "Vista_Inscripciones_Estudiantes" que muestre los siguientes
@@ -181,7 +184,7 @@ values (nombre, email, fecha_nacimiento);
 end $$
 DELIMITER ;
 
-call InsertarEstudiante("James","jjgamboag@gmail.com","2025-04-28");
+call InsertarEstudiante("mario gomez","MARIOGOMEZ@GMAIL.COM","2025-04-28");
 
 select * from  estudiantes;
 DELIMITER $$
@@ -308,3 +311,68 @@ begin
 end $$
 
 DELIMITER  ;
+
+
+/*1 Realizar un trigger para que Antes de insertar un profesor, verificar que tenga email*/
+DELIMITER $$
+create trigger Verificar_Email_Profesor
+before insert on Profesores
+for each row
+begin
+if new.email is null or new.email = " " then
+signal sqlstate "45000"
+set message_text = "el profeesr debe tener un email";
+end if;
+end $$
+
+DELIMITER  ;
+
+insert into Profesores (nombre, email, id_departamento)
+values ("Cristhian Lagos", " ", 1);
+
+insert into Profesores (nombre, email, id_departamento)
+values ("Cristhian Lagos", " cl9@hotmail.com", 1);
+/*2 Realizar un trigger para Evitar inscripciones duplicadas del mismo estudiante en el mismo curso*/
+DELIMITER $$
+
+create trigger Evitar_Inscripcion_Duplicada
+before insert on Inscripciones
+for each row
+begin
+if exists (
+select 1 from Inscripciones
+where id_estudiante = new.id_estudiante and id_curso = new.id_curso
+) then
+signal sqlstate "45000"
+set message_text = "el estudiante ya esta inscrito en este curso";
+end if;
+end $$
+DELIMITER  ;
+
+insert into Inscripciones (id_estudiante, id_curso, fecha_inscripcion)
+values (2, 3, "2025-04-29");
+
+
+/*3  Un trigger para Actualizar automáticamente el email a minúsculas al insertar estudiante*/
+DELIMITER $$
+
+create trigger Email_Estudiante_Minusculas
+before insert on Estudiantes
+for each row
+begin
+set new.email = lower(new.email);
+end $$
+DELIMITER  ;
+
+insert into Estudiantes (nombre, email, fecha_nacimiento)
+values ("Mario Gomez", "MARIOGOMEZ@GMAIL.COM", "2000-07-12");
+
+select * from estudiantes where nombre = "Mario gomez";
+
+select nombre, email from estudiantes;
+
+
+select * from cursos;
+
+insert into Inscripciones (id_estudiante, id_curso, fecha_inscripcion)
+values (8, 1, "2025-04-29");
