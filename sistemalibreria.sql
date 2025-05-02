@@ -102,7 +102,14 @@ create table resenas_libros (
 
 alter table clientes add fecha_de_registro date;
 
-drop table resenas_libros;
+create table libros_archivados (
+  id_libro_archivado int auto_increment primary key,
+  titulo varchar(250),
+  motivo_archivo varchar(255),
+  fecha_archivo date
+);
+
+drop table libros_archivados;
 
 /*Parte 6: SQL para Crear, Consultar y Manipular Datos (1 hora)
 1. Inserte datos ficticios en las tablas de libros, autores, clientes y ventas.
