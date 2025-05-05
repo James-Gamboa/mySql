@@ -50,7 +50,7 @@ create table log_table (
 );
 
 
-  select * from resenas_libros;
+  select * from autores;
   
   /*Parte 4: Consultas SQL con Múltiples Tablas
 1. Realice consultas para obtener la siguiente información:
@@ -231,13 +231,16 @@ Criterios de evaluación:
 -- 1. Cree una vista que muestre los libros más vendidos junto con el nombre del autor y la categoría.
 
 create view vista_libros_mas_vendidos as
-select libros.titulo, autores.nombre_autor, categorias.nombre_categoria, count(ventas.id_libro) as total_ventas
+select libros.id_libro, libros.titulo, autores.nombre_autor, categorias.nombre_categoria, count(ventas.id_libro) as total_ventas
 from ventas
 join libros on ventas.id_libro = libros.id_libro
 join autores on libros.id_libro = autores.id_libro
 join categorias on libros.id_categoria = categorias.id_categoria
-group by libros.id_libro
+group by libros.id_libro, libros.titulo, autores.nombre_autor, categorias.nombre_categoria
 order by total_ventas desc;
+
+
+select * from vista_libros_mas_vendidos;
 
 -- 2. Cree una vista que resuma las ventas mensuales de cada cliente.
 
@@ -246,6 +249,8 @@ select clientes.nombre_cliente, month(ventas.fecha_de_compra) as mes, count(*) a
 from ventas
 join clientes on ventas.id_cliente = clientes.id_cliente
 group by clientes.id_cliente, month(ventas.fecha_de_compra);
+
+select * from  vista_libros_mas_vendidos;
 
 /*Parte 8: Procedimientos Almacenados
 1. Cree un procedimiento almacenado que permita registrar una nueva venta, actualizando
@@ -270,6 +275,12 @@ end $$
 
 DELIMITER ;
 
+
+insert into clientes (id_cliente, nombre_cliente) values ("juan perez");
+insert into libros (id_libro, titulo, cantidad) values (101, "el principito", 10);
+
+call registrar_venta_completa(1, 101, now());
+
 -- 2. Cree un procedimiento que calcule y devuelva el total de ventas de un autor específico.
 
 DELIMITER $$
@@ -289,6 +300,11 @@ end $$
 
 DELIMITER ;
 
+insert into autores (id_libro, nombre_autor) values (101, "antoine de saint-exupéry");
+insert into ventas (id_venta, id_cliente, id_libro, fecha_de_compra) values (201, 1, 101, now());
+
+call ventas_totales_por_autor("antoine de saint-exupéry");
+
 /* Parte 9: Triggers
 1. Cree un trigger que automáticamente actualice el stock de libros cuando se realice una
 venta.
@@ -306,6 +322,12 @@ end $$
 
 DELIMITER ;
 
+select cantidad from libros where id_libro = 101;
+
+insert into ventas (id_cliente, id_libro, fecha_de_compra) values (1, 101, now());
+
+select cantidad from libros where id_libro = 101;
+
 -- 2.  Cree un trigger que registre en una tabla llamada log_table cada vez que se borre un cliente.
 
 DELIMITER $$
@@ -318,6 +340,13 @@ begin
 end $$
 
 DELIMITER ;
+
+insert into clientes (id_cliente, nombre) values (11, "Roman");
+
+delete from clientes where id_cliente = 11;
+
+
+select * from log_table;
 
 /*Parte 9: Análisis de la base de datos
 Como parte de su proceso de aprendizaje, analice la base de datos creada y desarrolle vistas,
